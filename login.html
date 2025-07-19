@@ -1,87 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
   <meta charset="UTF-8">
-  <title>Aviator 365 - Login</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f1f1f1;
-      text-align: center;
-      padding: 50px;
-    }
-    input, button {
-      padding: 10px;
-      margin: 10px;
-      border-radius: 5px;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .lang-buttons {
-      margin-bottom: 20px;
-    }
-    .lang-buttons button {
-      margin: 5px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Aviator 365</title>
 </head>
 <body>
-
-  <div class="lang-buttons">
-    <button onclick="setLang('en')">English</button>
-    <button onclick="setLang('mr')">मराठी</button>
-  </div>
-
-  <h2 id="title">Login or Sign Up</h2>
-
-  <input type="text" id="username" placeholder="Username"><br>
-  <input type="password" id="password" placeholder="Password"><br>
-  <button onclick="loginSignup()">Login / Sign Up</button>
+  <h2>🔐 लॉगिन करा</h2>
+  <form id="loginForm">
+    <input type="text" id="loginUsername" placeholder="नाव" required><br><br>
+    <input type="password" id="loginPassword" placeholder="पासवर्ड" required><br><br>
+    <button type="submit">Login</button>
+  </form>
 
   <script>
-    function loginSignup() {
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-      if (username === "" || password === "") {
-        alert(currentLang === 'mr' ? "वापरकर्ता नाव आणि पासवर्ड आवश्यक आहे" : "Username and password are required");
-        return;
-      }
+      const username = document.getElementById('loginUsername').value;
+      const password = document.getElementById('loginPassword').value;
 
-      // Save user in localStorage
-      localStorage.setItem("aviatorUser", JSON.stringify({
-        username: username,
-        balance: 1000 // default balance
-      }));
+      const savedUser = JSON.parse(localStorage.getItem('aviatorUser'));
 
-      // Redirect to game page
-      window.location.href = "game.html";
-    }
-
-    // Language switch logic
-    let currentLang = 'en';
-    function setLang(lang) {
-      currentLang = lang;
-      if (lang === 'mr') {
-        document.getElementById("title").innerText = "लॉगिन किंवा साइन अप";
-        document.getElementById("username").placeholder = "वापरकर्ता नाव";
-        document.getElementById("password").placeholder = "पासवर्ड";
-        document.querySelector("button[onclick='loginSignup()']").innerText = "लॉगिन / साइन अप";
+      if (savedUser && username === savedUser.username && password === savedUser.password) {
+        localStorage.setItem("isLoggedIn", "true");
+        alert("लॉगिन यशस्वी!");
+        window.location.href = "game.html";
       } else {
-        document.getElementById("title").innerText = "Login or Sign Up";
-        document.getElementById("username").placeholder = "Username";
-        document.getElementById("password").placeholder = "Password";
-        document.querySelector("button[onclick='loginSignup()']").innerText = "Login / Sign Up";
+        alert("चुकीचा username किंवा password");
       }
-    }
+    });
   </script>
-
 </body>
 </html>
