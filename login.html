@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Aviator 365</title>
+</head>
+<body>
+  <h2>🔐 लॉगिन करा</h2>
+  <form id="loginForm">
+    <input type="text" id="username" placeholder="वापरकर्तानाव" required><br><br>
+    <input type="password" id="password" placeholder="पासवर्ड" required><br><br>
+    <button type="submit">Login</button>
+  </form>
+  <p>खाते नाही? <a href="signup.html">Sign up करा</a></p>
+
+  <script>
+    document.getElementById("loginForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      const stored = JSON.parse(localStorage.getItem(username));
+      if (stored && stored.password === password) {
+        localStorage.setItem("loggedInUser", username);
+        alert("Login यशस्वी!");
+        window.location.href = "game.html";
+      } else {
+        alert("चुकीचे नाव किंवा पासवर्ड!");
+      }
+    });
+  </script>
+</body>
+</html>
