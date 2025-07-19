@@ -13,22 +13,29 @@
     <button type="submit">Login</button>
   </form>
   <p>खाते नाही? <a href="signup.html">Sign up करा</a></p>
+<script>
+  document.getElementById("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
 
-  <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const username = document.getElementById("username").value;
-      const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-      const stored = JSON.parse(localStorage.getItem(username));
-      if (stored && stored.password === password) {
-        localStorage.setItem("loggedInUser", username);
-        alert("Login यशस्वी!");
-        window.location.href = "game.html";
-      } else {
-        alert("चुकीचे नाव किंवा पासवर्ड!");
+    const stored = JSON.parse(localStorage.getItem("users")) || [];
+
+    const found = stored.find(u => u.username === username && u.password === password);
+
+    if (found) {
+      // Login यशस्वी झालं
+      localStorage.setItem("username", username);
+
+      if (!localStorage.getItem("balance")) {
+        localStorage.setItem("balance", "1000");  // सुरुवातीचं balance
       }
-    });
-  </script>
-</body>
-</html>
+
+      window.location.href = "game.html"; // गेम पेजकडे पाठव
+    } else {
+      alert("चुकीचं युजरनेम किंवा पासवर्ड.");
+    }
+  });
+</script>
+  
