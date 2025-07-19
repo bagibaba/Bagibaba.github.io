@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Aviator 365</title>
+</head>
+<body>
+  <h2>📝 साईन अप करा</h2>
+  <form id="signupForm">
+    <input type="text" id="newUsername" placeholder="Username" required><br>
+    <input type="password" id="newPassword" placeholder="Password" required><br>
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const username = document.getElementById('newUsername').value;
+      const password = document.getElementById('newPassword').value;
+
+      // लोकल स्टोरेज मध्ये माहिती साठवा
+      localStorage.setItem('username', username);
+      localStorage.setItem('password', password);
+
+      alert('साईन अप यशस्वी! आता लॉगिन करा.');
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
