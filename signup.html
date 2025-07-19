@@ -8,20 +8,26 @@
 <body>
   <h2>📝 साईन अप करा</h2>
   <form id="signupForm">
-    <input type="text" id="newUsername" placeholder="Username" required><br>
-    <input type="password" id="newPassword" placeholder="Password" required><br>
+    <input type="text" id="newUsername" placeholder="नाव" required><br><br>
+    <input type="password" id="newPassword" placeholder="पासवर्ड" required><br><br>
     <button type="submit">Sign Up</button>
   </form>
 
   <script>
     document.getElementById('signupForm').addEventListener('submit', function(e) {
       e.preventDefault();
+
       const username = document.getElementById('newUsername').value;
       const password = document.getElementById('newPassword').value;
 
       // लोकल स्टोरेज मध्ये माहिती साठवा
-      localStorage.setItem('username', username);
-      localStorage.setItem('password', password);
+      const user = {
+        username: username,
+        password: password,
+        balance: 1000
+      };
+      localStorage.setItem('aviatorUser', JSON.stringify(user));
+      localStorage.setItem("isLoggedIn", "false");
 
       alert('साईन अप यशस्वी! आता लॉगिन करा.');
       window.location.href = 'login.html';
