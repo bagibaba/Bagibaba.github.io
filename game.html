@@ -1,58 +1,143 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="mr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Aviator 365 - Game</title>
+  <title>Aviator 365 Game</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      text-align: center;
-      padding: 30px;
-    }
-    .plane {
-      font-size: 3rem;
-      position: relative;
-      left: 0;
-      transition: left 3s linear;
-    }
-    .btn {
-      padding: 10px 20px;
-      margin-top: 20px;
-      background: green;
+      font-family: 'Arial', sans-serif;
+      background-color: #121212;
       color: white;
-      font-size: 1.2rem;
-      border: none;
-      cursor: pointer;
+      text-align: center;
+      padding: 20px;
     }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    #plane {
+      font-size: 2.5rem;
+      position: relative;
+      top: 20px;
+      transition: transform 4s linear;
+    }
+
     #multiplier {
       font-size: 2rem;
+      margin: 10px;
+    }
+
+    #takeCashBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #00cc66;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    #balance {
       margin-top: 20px;
+      font-size: 1.2rem;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 1.1rem;
+      color: yellow;
     }
   </style>
 </head>
 <body>
-  <h1>✈️ Aviator 365</h1>
+  <h1>🛩️ Aviator 365</h1>
+  <div id="plane">✈️</div>
   <div id="multiplier">x1.00</div>
-  <div class="plane" id="plane">🛩️</div>
-  <button class="btn" onclick="startGame()">Start</button>
-  <button class="btn" onclick="cashOut()">Cash Out</button>
+  <button id="takeCashBtn">💰 कॅश घ्या</button>
+  <div id="status">🎮 गेम सुरू आहे...</div>
+  <div id="balance">💰 बॅलन्स: ₹<span id="bal">1000</span></div>
 
   <script>
-    let multiplier = 1.0;
+    let multiplier = 1.00;
     let interval;
-    let running = false;
+    let flying = true;
+    const plane = document.getElementById("plane");
+    const multDisplay = document.getElementById("multiplier");
+    const status = document.getElementById("status");
+    const balSpan = document.getElementById("bal");
+    const takeBtn = document.getElementById("takeCashBtn");
 
-    function startGame() {
-      multiplier = 1.0;
-      document.getElementById('multiplier').innerText = 'x' + multiplier.toFixed(2);
-      running = true;
-      movePlane();
-      interval = setInterval(() => {
-        multiplier += Math.random() * 0.2;
-        document.getElementById('multiplier').innerText = 'x' + multiplier.toFixed(2);
-        if (multiplier >= 10) stopGame();
-      }, 500);
+    // Get balance from localStorage
+    let balance = localStorage.getItem("balance");
+    if (!balance) {
+      balance = 1000;
+      localStorage.setItem("balance", balance);
     }
+    balSpan.innerText = balance;
+
+    // Move plane up
+    plane.style.transform = "translateY(-250px)";
+
+    // Start multiplier
+    interval = setInterval(() => {
+      multiplier += Math.random() * 0.15;
+      multDisplay.innerText = "x" + multiplier.toFixed(2);
+    }, 200);
+
+    // Crash after random time
+    const crashTime = Math.random() * 5000 + 3000;
+    setTimeout(() => {
+      if (flying) {
+        flying = false;
+        clearInterval(interval);
+        status.innerText = "💥 विमान कोसळलं!";
+        takeBtn.disabled = true;
+      }
+    }, crashTime);
+
+    takeBtn.addEventListener("click", () => {
+      if (flying) {
+        flying = false;
+        clearInterval(interval);
+        const won = (100 * multiplier).toFixed(2);
+        balance = parseFloat(balance) + parseFloat(won);
+        localStorage.setItem("balance", balance);
+        balSpan.innerText = balance;
+        status.innerText = `✅ तुम्ही ₹${won} जिंकलात!`;
+        takeBtn.disabled = true;
+      }
+    });
+  </script>
+</<script>
+  // Logged-in user info localStorage मधून घ्या
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+
+  if (!user) {
+    alert("कृपया लॉगिन करा.");
+    window.location.href = "login.html";
+  } else {
+    // नाव आणि बॅलन्स दाखवा
+    const infoDiv = document.createElement("div");
+    infoDiv.style.position = "absolute";
+    infoDiv.style.top = "10px";
+    infoDiv.style.left = "10px";
+    infoDiv.style.background = "#fff";
+    infoDiv.style.padding = "10px";
+    infoDiv.style.borderRadius = "10px";
+    infoDiv.style.boxShadow = "0 0 10px rgba(0,0,0,0.2)";
+    infoDiv.innerHTML = `
+      👤 <strong>${user.username}</strong><br>
+      💰 बॅलन्स: ₹${user.balance}
+      <br><br>
+      <button onclick="logout()">🚪 Logout</button>
+    `;
+    document.body.appendChild(infoDiv);
+  }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
+  }
+</script>body>
+</html>
