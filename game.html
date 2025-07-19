@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aviator 365 - Game</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 30px;
+    }
+    .plane {
+      font-size: 3rem;
+      position: relative;
+      left: 0;
+      transition: left 3s linear;
+    }
+    .btn {
+      padding: 10px 20px;
+      margin-top: 20px;
+      background: green;
+      color: white;
+      font-size: 1.2rem;
+      border: none;
+      cursor: pointer;
+    }
+    #multiplier {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>✈️ Aviator 365</h1>
+  <div id="multiplier">x1.00</div>
+  <div class="plane" id="plane">🛩️</div>
+  <button class="btn" onclick="startGame()">Start</button>
+  <button class="btn" onclick="cashOut()">Cash Out</button>
+
+  <script>
+    let multiplier = 1.0;
+    let interval;
+    let running = false;
+
+    function startGame() {
+      multiplier = 1.0;
+      document.getElementById('multiplier').innerText = 'x' + multiplier.toFixed(2);
+      running = true;
+      movePlane();
+      interval = setInterval(() => {
+        multiplier += Math.random() * 0.2;
+        document.getElementById('multiplier').innerText = 'x' + multiplier.toFixed(2);
+        if (multiplier >= 10) stopGame();
+      }, 500);
+    }
