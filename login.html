@@ -1,41 +1,87 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Aviator 365</title>
+  <title>Aviator 365 - Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f1f1f1;
+      text-align: center;
+      padding: 50px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 10px;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .lang-buttons {
+      margin-bottom: 20px;
+    }
+    .lang-buttons button {
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
-  <h2>🔐 लॉगिन करा</h2>
-  <form id="loginForm">
-    <input type="text" id="username" placeholder="वापरकर्तानाव" required><br><br>
-    <input type="password" id="password" placeholder="पासवर्ड" required><br><br>
-    <button type="submit">Login</button>
-  </form>
-  <p>खाते नाही? <a href="signup.html">Sign up करा</a></p>
-<script>
-  document.getElementById("loginForm").addEventListener("submit", function(e) {
-    e.preventDefault();
 
-    const username = document.getElementById("username").value;
-    const password = document.getElementById("password").value;
+  <div class="lang-buttons">
+    <button onclick="setLang('en')">English</button>
+    <button onclick="setLang('mr')">मराठी</button>
+  </div>
 
-    const stored = JSON.parse(localStorage.getItem("users")) || [];
+  <h2 id="title">Login or Sign Up</h2>
 
-    const found = stored.find(u => u.username === username && u.password === password);
+  <input type="text" id="username" placeholder="Username"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="loginSignup()">Login / Sign Up</button>
 
-    if (found) {
-      // Login यशस्वी झालं
-      localStorage.setItem("username", username);
+  <script>
+    function loginSignup() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
 
-      if (!localStorage.getItem("balance")) {
-        localStorage.setItem("balance", "1000");  // सुरुवातीचं balance
+      if (username === "" || password === "") {
+        alert(currentLang === 'mr' ? "वापरकर्ता नाव आणि पासवर्ड आवश्यक आहे" : "Username and password are required");
+        return;
       }
 
-      window.location.href = "game.html"; // गेम पेजकडे पाठव
-    } else {
-      alert("चुकीचं युजरनेम किंवा पासवर्ड.");
+      // Save user in localStorage
+      localStorage.setItem("aviatorUser", JSON.stringify({
+        username: username,
+        balance: 1000 // default balance
+      }));
+
+      // Redirect to game page
+      window.location.href = "game.html";
     }
-  });
-</script>
-  
+
+    // Language switch logic
+    let currentLang = 'en';
+    function setLang(lang) {
+      currentLang = lang;
+      if (lang === 'mr') {
+        document.getElementById("title").innerText = "लॉगिन किंवा साइन अप";
+        document.getElementById("username").placeholder = "वापरकर्ता नाव";
+        document.getElementById("password").placeholder = "पासवर्ड";
+        document.querySelector("button[onclick='loginSignup()']").innerText = "लॉगिन / साइन अप";
+      } else {
+        document.getElementById("title").innerText = "Login or Sign Up";
+        document.getElementById("username").placeholder = "Username";
+        document.getElementById("password").placeholder = "Password";
+        document.querySelector("button[onclick='loginSignup()']").innerText = "Login / Sign Up";
+      }
+    }
+  </script>
+
+</body>
+</html>
